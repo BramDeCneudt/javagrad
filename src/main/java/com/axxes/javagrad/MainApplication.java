@@ -6,23 +6,21 @@ import lombok.extern.slf4j.Slf4j;
 import org.deeplearning4j.core.storage.StatsStorage;
 import org.deeplearning4j.ui.api.UIServer;
 import org.deeplearning4j.ui.model.storage.InMemoryStatsStorage;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
 @Slf4j
-public class JavagradCommandLineApplication implements CommandLineRunner {
+public class MainApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(JavagradCommandLineApplication.class, args);
-	}
-
-    @Override
-    public void run(String... args) throws Exception {
+    public static void main(String[] args) throws Exception {
         log.info("Running JavagradCommandLineApplication");
 
+        // Initialize UI Server with explicit configuration
+        log.info("Starting UI Server...");
         UIServer uiServer = UIServer.getInstance();
+
+        // Wait a bit for the server to fully start
+        Thread.sleep(2000);
+
+        log.info("UI Server is running at: http://localhost:9000");
 
         //Configure where the network information (gradients, score vs. time etc) is to be stored. Here: store in memory.
         StatsStorage statsStorage = new InMemoryStatsStorage();         //Alternative: new FileStatsStorage(File), for saving and loading later
@@ -39,7 +37,8 @@ public class JavagradCommandLineApplication implements CommandLineRunner {
                 .model(model)
                 .build();
         trainer.init();
-        trainer.train();
-        trainer.evaluate();
+        model.fit();
+//        trainer.train();
+//        trainer.evaluate();
     }
 }
