@@ -1,5 +1,6 @@
 package com.axxes.javagrad.network;
 
+import com.axxes.javagrad.network.listener.ModelListener;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.deeplearning4j.core.storage.StatsStorage;
@@ -8,9 +9,10 @@ import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
-import org.deeplearning4j.optimize.listeners.CheckpointListener;
+import org.deeplearning4j.optimize.listeners.EvaluativeListener;
 import org.deeplearning4j.ui.model.stats.StatsListener;
 import org.nd4j.linalg.activations.Activation;
+import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.learning.config.Sgd;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
@@ -23,7 +25,7 @@ public class TestNetwork {
     @Builder.Default
     private final int inputLayer = 784;
     @Builder.Default
-    private final int numHidden = 30;
+    private final int numHidden = 10;
     @Builder.Default
     private final int numOutputs = 10;
     private final StatsStorage statsStorage;
@@ -53,7 +55,10 @@ public class TestNetwork {
 
 //        model.setListeners(builder.build());
 
-        model.setListeners(new StatsListener(statsStorage));
+        model.setListeners(
+                new StatsListener(statsStorage),
+                new ModelListener()
+        );
 
         return model;
     }

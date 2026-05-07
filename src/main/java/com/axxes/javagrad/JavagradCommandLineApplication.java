@@ -22,18 +22,16 @@ public class JavagradCommandLineApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         log.info("Running JavagradCommandLineApplication");
 
-        UIServer uiServer = UIServer.getInstance();
-
         //Configure where the network information (gradients, score vs. time etc) is to be stored. Here: store in memory.
         StatsStorage statsStorage = new InMemoryStatsStorage();         //Alternative: new FileStatsStorage(File), for saving and loading later
 
         //Attach the StatsStorage instance to the UI: this allows the contents of the StatsStorage to be visualized
-        uiServer.attach(statsStorage);
 
         TestNetwork testNetwork = TestNetwork.builder()
                 .statsStorage(statsStorage)
                 .build();
         var model = testNetwork.generateNetwork();
+
 
         Trainer trainer = Trainer.builder()
                 .model(model)

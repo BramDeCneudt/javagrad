@@ -19,7 +19,7 @@ public class Trainer {
     @Builder.Default
     private final int seed = 123;
     @Builder.Default
-    private final int epochs = 30;
+    private final int epochs = 2;
 
     private final MultiLayerNetwork model;
 
